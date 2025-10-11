@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Studio IDE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              'neutral-50': '#fafafa',
+              'neutral-100': '#f5f5f5',
+              'neutral-200': '#e5e5e5',
+              'neutral-300': '#d4d4d4',
+              'neutral-400': '#a3a3a3',
+              'neutral-500': '#737373',
+              'neutral-600': '#525252',
+              'neutral-700': '#404040',
+              'neutral-800': '#262626',
+              'neutral-900': '#171717',
+              'neutral-950': '#0a0a0a',
+              'indigo-950': '#1e1b4b',
+              'indigo-900': '#312e81',
+              'indigo-800': '#3730a3',
+              'indigo-700': '#4338ca',
+              'indigo-600': '#4f46e5',
+              'indigo-500': '#6366f1',
+              'indigo-400': '#818cf8',
+            },
+            keyframes: {
+              'fade-in': {
+                '0%': { opacity: '0', transform: 'translateY(10px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              'spin-outer': {
+                'from': { transform: 'rotate(0deg)' },
+                'to': { transform: 'rotate(360deg)' },
+              },
+              'spin-inner': {
+                'from': { transform: 'rotate(0deg)' },
+                'to': { transform: 'rotate(-360deg)' },
+              }
+            },
+            animation: {
+              'fade-in': 'fade-in 0.5s ease-out forwards',
+              'spin-outer': 'spin-outer 2s linear infinite',
+              'spin-inner': 'spin-inner 1.5s linear infinite',
+            }
+          }
+        }
+      }
+    </script>
+    <script>
+      // The HTML tag defaults to class="dark". This script removes it only if light mode is explicitly set.
+      // This prevents any "flash of light mode" on initial load.
+      if (localStorage.getItem('ai-studio-theme') === 'light') {
+        document.documentElement.classList.remove('dark');
+      }
+    </script>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.22.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "monaco-editor": "https://aistudiocdn.com/monaco-editor@^0.54.0",
+    "esbuild-wasm": "https://cdn.jsdelivr.net/npm/esbuild-wasm@0.21.3/esm/browser.js",
+    "react-resizable-panels": "https://esm.sh/react-resizable-panels@2.0.19?external=react"
+  }
+}
+</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.25.1/full/pyodide.js"></script>
+</head>
+  <body class="bg-neutral-200 dark:bg-neutral-950 text-neutral-800 dark:text-neutral-200">
+    <div id="root"></div>
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js')
+          .then(registration => {
+            console.log('Service Worker registered with scope:', registration.scope);
+          })
+          .catch(error => {
+            console.error('Service Worker registration failed:', error);
+          });
+      }
+    </script>
+    <!-- Add Babel for in-browser JSX/TSX transpilation -->
+    <script src="https://unpkg.com/@babel/standalone@7.24.0/babel.min.js"></script>
+    <script>
+      // This configures Monaco Editor to load its web workers from the correct CDN path.
+      // It's necessary for language-specific features like syntax highlighting and validation to work correctly.
+      window.MonacoEnvironment = {
+        getWorker: function (workerId, label) {
+          // The version should match the one specified in the importmap.
+          const MONACO_VERSION = '0.54.0';
+          const MONACO_CDN_BASE = `https://aistudiocdn.com/monaco-editor@${MONACO_VERSION}/esm/vs`;
+
+          const workerMap = {
+            'json': `${MONACO_CDN_BASE}/language/json/json.worker.js`,
+            'css': `${MONACO_CDN_BASE}/language/css/css.worker.js`,
+            'scss': `${MONACO_CDN_BASE}/language/css/css.worker.js`,
+            'less': `${MONACO_CDN_BASE}/language/css/css.worker.js`,
+            'html': `${MONACO_CDN_BASE}/language/html/html.worker.js`,
+            'handlebars': `${MONACO_CDN_BASE}/language/html/html.worker.js`,
+            'razor': `${MONACO_CDN_BASE}/language/html/html.worker.js`,
+            'typescript': `${MONACO_CDN_BASE}/language/typescript/ts.worker.js`,
+            'javascript': `${MONACO_CDN_BASE}/language/typescript/ts.worker.js`
+          };
+          
+          const workerUrl = workerMap[label] || `${MONACO_CDN_BASE}/editor/editor.worker.js`;
+
+          return new Worker(workerUrl, { type: 'module' });
+        }
+      };
+    </script>
+    <!-- Set type to "text/babel" to enable transpilation -->
+    <script type="text/babel" data-type="module" src="/index.tsx"></script>
+  </body>
+</html>

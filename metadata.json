@@ -1,0 +1,7 @@
+{
+  "name": "Copy of Copy of Dark Ai 2\\2",
+  "description": "A comprehensive AI-powered development environment with safe sandbox execution capabilities for Node.js and Python, complete with project management and Gemini integration.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
