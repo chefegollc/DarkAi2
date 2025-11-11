@@ -1,7 +1,7 @@
 {
-  "name": "copy-of-copy-of-dark-ai-2\2",
+  "name": "dark-ai-3.1",
   "private": true,
-  "version": "0.0.0",
+  "version": "3.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -14,7 +14,7 @@
     "react-dom": "^19.2.0",
     "monaco-editor": "^0.54.0",
     "esbuild-wasm": "0.21.3",
-    "react-resizable-panels": "2.0.19"
+    "react-resizable-panels": "^2.1.6"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
